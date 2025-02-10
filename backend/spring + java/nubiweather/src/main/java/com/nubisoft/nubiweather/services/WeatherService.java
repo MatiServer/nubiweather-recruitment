@@ -4,33 +4,32 @@ import com.nubisoft.nubiweather.models.WeatherData;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 @Service
 public class WeatherService {
     private static final String API_KEY = "7fde70277f3e45a1986165818251002";
-    private static final String BASE_URL = "https://api.weatherapi.com/v1/forecast.json?key=";
+    private static final String BASE_URL = "https://api.weatherapi.com/v1/current.json?key=";
 
-    public List<WeatherData> getWeeklyWeather(String city) {
-        String url = BASE_URL + API_KEY + "&q=" + city + "&days=7&aqi=no&alerts=no";
+    public WeatherData getCurrentWeather(String city) {
+        String url = BASE_URL + API_KEY + "&q=" + city + "&aqi=no";
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<List> response = restTemplate.getForEntity(url, List.class);
+        ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
 
-        List<WeatherData> forecastList = new ArrayList<>();
+        WeatherData weatherData = null;
+
         if (response.getBody() != null) {
-            for (Object obj : response.getBody()) {
-                Map<String, Object> day = (Map<String, Object>) obj;
+            Map<String, Object> body = response.getBody();
+            Map<String, Object> current = (Map<String, Object>) body.get("current");
+            Map<String, Object> condition = (Map<String, Object>) current.get("condition");
 
-                String date = (String) day.get("date");
-                String description = (String) day.get("description");
-                String icon = (String) day.get("icon");
-                double temp = (double) day.get("temp");
+            String description = (String) condition.get("text");
+            String icon = (String) condition.get("icon");
+            double temp = (double) current.get("temp_c");
 
-                forecastList.add(new WeatherData(date, description, icon, temp));
-            }
+            weatherData = new WeatherData("Today", description, icon, temp);
         }
-        return forecastList;
+
+        return weatherData;
     }
 }
