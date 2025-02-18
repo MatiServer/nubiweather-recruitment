@@ -2,7 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+#root {
+  width: 100vw !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -31,7 +34,8 @@ h1 {
 }
 
 #app {
-  min-width: 100%;
+  max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
