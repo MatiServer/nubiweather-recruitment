@@ -7,10 +7,11 @@ function App() {
     const [weather, setWeather] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [viewMode, setViewMode] = useState("single"); // 'single' lub 'weekly'
+    const [viewMode, setViewMode] = useState("single");
+    const [city, setCity] = useState("hamburg");
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/weather/hamburg")
+        fetch(`http://localhost:8080/api/weather/${city}`)
             .then((response) => {
                 if (!response.ok) throw new Error("Błąd w pobieraniu danych!");
                 return response.json();
@@ -23,7 +24,7 @@ function App() {
                 setError(err.message);
                 setLoading(false);
             });
-    }, []);
+    }, [city]);
 
     return (
         <div className="flex justify-center flex-col gap-6 items-center min-h-screen bg-blue-100 dark:bg-gray-900 p-6 w-screen max-w-full mx-auto">
@@ -36,7 +37,7 @@ function App() {
 
             <section className="w-full">
                 <h2 className="text-xl font-semibold text-center mb-4 text-gray-800 dark:text-gray-200">
-                    Prognoza pogody dla Hamburga ({viewMode === "single" ? "1 dzień" : "7 dni"})
+                    Prognoza pogody dla {city === "hamburg" ? "Hamburga" : "Gliwic"} ({viewMode === "single" ? "1 dzień" : "7 dni"})
                 </h2>
 
                 {error && <p className="text-red-500 text-center">{error}</p>}
@@ -56,8 +57,8 @@ function App() {
                                 />
                             </div>
                         ) : (
-                            <WeatherList/>
-                        )}
+                            <WeatherList city={city} />
+                            )}
                     </>
                 )}
 
@@ -68,9 +69,17 @@ function App() {
                         {viewMode === "single" ? "Pokaż 7-dniową prognozę" : "Pokaż 1-dniową prognozę"}
                     </button>
                 </div>
+
+                <div className="w-full flex justify-center mt-4">
+                    <button
+                        onClick={() => setCity(city === "hamburg" ? "gliwice" : "hamburg")}
+                        className="bg-green-500 text-white font-semibold py-2 px-4 rounded-lg shadow-lg transition duration-300 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 mt-4">
+                        Zmień miasto na {city === "hamburg" ? "Gliwice" : "Hamburg"}
+                    </button>
+                </div>
             </section>
         </div>
-);
+    );
 }
 
 export default App;

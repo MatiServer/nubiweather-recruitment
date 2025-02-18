@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/nubiweather-recruitment.iml" filepath="$PROJECT_DIR$/.idea/nubiweather-recruitment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/nubiweather.main.iml" filepath="$PROJECT_DIR$/.idea/modules/nubiweather.main.iml" />
     </modules>
   </component>
 </project>

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import WeatherCard from "./WeatherCard";
 
-const WeatherList = () => {
+// eslint-disable-next-line react/prop-types
+const WeatherList = ({ city }) => {
     const [weatherData, setWeatherData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/weather/hamburg/weekly")
+        fetch(`http://localhost:8080/api/weather/${city}/weekly`)
             .then((response) => {
                 if (!response.ok) throw new Error("Błąd w pobieraniu danych!");
                 return response.json();
@@ -20,7 +21,7 @@ const WeatherList = () => {
                 setError(err.message);
                 setLoading(false);
             });
-    }, []);
+    }, [city]);
 
     if (loading) return <p className="text-center text-gray-600 dark:text-gray-400">Ładowanie danych pogodowych...</p>;
     if (error) return <p className="text-red-500 text-center">{error}</p>;
